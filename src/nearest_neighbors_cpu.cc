@@ -26,7 +26,7 @@ void NearestNeighborsCPU::compute_lut(LUT &out, const Series &library,
     cache.resize(n_target, n_library);
 
     // Compute distances between all library and target points
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(dynamic)
     for (auto i = 0u; i < n_target; i++) {
         std::vector<float> ssd(n_library);
 
@@ -59,7 +59,7 @@ void NearestNeighborsCPU::compute_lut(LUT &out, const Series &library,
     }
 
     // Sort indices
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(dynamic)
     for (auto i = 0u; i < n_target; i++) {
         std::partial_sort(cache.indices.begin() + i * n_library,
                           cache.indices.begin() + i * n_library + top_k,
